@@ -2,62 +2,65 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Detil;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use App\Filament\Resources\ROResource\Pages;
+use App\Filament\Resources\ROResource\RelationManagers;
+use App\Models\RO;
 use Faker\Provider\ar_EG\Text;
-use Filament\Resources\Resource;
+use Filament\Forms;
 use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\DetilResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\DetilResource\RelationManagers;
 
-class DetilResource extends Resource
+class ROResource extends Resource
 {
-    protected static ?string $model = Detil::class;
+    protected static ?string $model = RO::class;
+
+    protected static ?string $title = 'RO';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 3;
 
     public static function getModelLabel(): string
     {
-        return 'Detil';
+        return 'RO';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Detil';
+        return 'RO';
     }
 
     public static function getSlug(): string
     {
-        return 'detil';
+        return 'ro';
     }
-
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('sub_komponen_id')
-                    ->label('Sub Komponen')
-                    ->relationship('subKomponen', 'sub_komponen')
+                Select::make('iku_id')
+                    ->label('IKU')
+                    ->relationship('iku', 'iku')
                     ->required()
-                    ->placeholder('Pilih sub komponen'),
-                TextInput::make('detil')
-                    ->label('Detil')
+                    ->placeholder('Pilih IKU'),
+
+                TextInput::make('ro')
+                    ->label('RO')
                     ->required()
-                    ->placeholder('Masukkan nama detil'),
+                    ->placeholder('Masukkan nama RO'),
                 TextInput::make('kode')
                     ->label('Kode')
                     ->required()
-                    ->placeholder('Masukkan kode detil'),
+                    ->placeholder('Masukkan kode RO'),
+                
             ]);
     }
 
@@ -65,20 +68,12 @@ class DetilResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('subKomponen.kode')
-                    ->label('Kode Sub Komponen')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('subKomponen.sub_komponen')
-                    ->label('Sub Komponen')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('detil')
-                    ->label('Detil')
+                TextColumn::make('ro')
+                    ->label('RO')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('kode')
-                    ->label('Kode Detil')
+                    ->label('Kode')
                     ->searchable()
                     ->sortable(),
             ])
@@ -105,9 +100,9 @@ class DetilResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDetils::route('/'),
-            'create' => Pages\CreateDetil::route('/create'),
-            'edit' => Pages\EditDetil::route('/{record}/edit'),
+            'index' => Pages\ListROS::route('/'),
+            'create' => Pages\CreateRO::route('/create'),
+            'edit' => Pages\EditRO::route('/{record}/edit'),
         ];
     }
 }

@@ -23,6 +23,23 @@ class SubDetilResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 7;
+
+    public static function getModelLabel(): string
+    {
+        return 'Sub Detil';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Sub Detil';
+    }
+
+    public static function getSlug(): string
+    {
+        return 'sub-detil';
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Komponen extends Model
 {
-    protected $fillable = ['komponen', 'kode'];
+    protected $table = 'komponen';
+
+    protected $fillable = ['ro_id','komponen', 'kode'];
+
+    public function ro()
+    {
+        return $this->belongsTo(RO::class, 'ro_id');
+    }
 
     public function subKomponens()
     {

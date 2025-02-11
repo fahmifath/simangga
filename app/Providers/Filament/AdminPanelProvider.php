@@ -3,8 +3,11 @@
 namespace App\Providers\Filament;
 
 use Filament\Pages;
+use App\Filament\Resources\SasaranKegiatanResource;
 use Filament\Panel;
 use Filament\Widgets;
+use Pages\SasaranKegiatan;
+use App\Filament\Resources\IKUResource;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Navigation\NavigationItem;
@@ -27,14 +30,21 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('SIMANGGA')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->spa()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                // SasaranKegiatanResource::class,
+            ])
+            ->resources([
+                SasaranKegiatanResource::class,
+                IKUResource::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([

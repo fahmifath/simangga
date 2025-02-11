@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Detil extends Model
 {
+    protected $table = 'detil';
+
     protected $fillable = ['sub_komponen_id', 'detil', 'kode'];
 
     public function subKomponen()

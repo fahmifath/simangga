@@ -23,6 +23,24 @@ class SubKomponenResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $sort = 6;
+    protected static ?int $navigationSort = 5;
+
+    public static function getModelLabel(): string
+    {
+        return 'Sub Komponen';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Sub Komponen';
+    }
+
+    public static function getSlug(): string
+    {
+        return 'sub-komponen';
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Faker\Provider\ar_EG\Text;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,10 +23,33 @@ class KomponenResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 4;
+
+    public static function getModelLabel(): string
+    {
+        return 'Komponen';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Komponen';
+    }
+
+    public static function getSlug(): string
+    {
+        return 'komponen';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Select::make('ro_id')
+                    ->label('RO')
+                    ->relationship('ro', 'ro')
+                    ->required()
+                    ->placeholder('Pilih RO'),
+
                 TextInput::make('komponen')
                     ->label('Komponen')
                     ->required()
@@ -41,6 +65,10 @@ class KomponenResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('ro.kode')
+                    ->label('Kode RO')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('komponen')
                     ->label('Komponen')
                     ->searchable()

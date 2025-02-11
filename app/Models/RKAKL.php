@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RKAKL extends Model
 {
+    protected $table = 'rkakl';
+
     protected $fillable = [
         'komponen_id',
         'sub_komponen_id',

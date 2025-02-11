@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubKomponen extends Model
 {
+    protected $table = 'sub_komponen';
+
     protected $fillable = ['komponen_id', 'sub_komponen', 'kode'];
 
     public function komponen()
