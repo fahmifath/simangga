@@ -17,9 +17,11 @@ class DataHierarki extends Page
 
     protected static string $view = 'filament.pages.data-hierarki';
     
-    protected static ?string $navigationLabel = 'Hierarki Data';
+    protected static ?string $navigationLabel = 'Data Hierarki';
 
-    protected static ?string $slug = 'hierarki-data';
+    protected static ?string $navigationGroup = 'Data Hierarki';
+
+    protected static ?string $slug = 'data-hierarki';
 
     public Collection $ros;
 
@@ -69,14 +71,14 @@ class DataHierarki extends Page
         switch ($this->modalType) {
             case 'ro':
                 $newData = Ro::create([
-                    'kode_ro' => $this->modalKode,
+                    'kode' => $this->modalKode,
                     'ro' => $this->modalName
                 ]);
                 break;
 
             case 'komponen':
                 $newData = Komponen::create([
-                    'kode_komponen' => $this->modalKode,
+                    'kode' => $this->modalKode,
                     'komponen' => $this->modalName,
                     'ro_id' => $this->parentId
                 ]);
@@ -84,7 +86,7 @@ class DataHierarki extends Page
 
             case 'subKomponen':
                 $newData = SubKomponen::create([
-                    'kode_sub_komponen' => $this->modalKode,
+                    'kode' => $this->modalKode,
                     'sub_komponen' => $this->modalName,
                     'komponen_id' => $this->parentId
                 ]);
@@ -92,7 +94,7 @@ class DataHierarki extends Page
 
             case 'detil':
                 $newData = Detil::create([
-                    'kode_detil' => $this->modalKode,
+                    'kode' => $this->modalKode,
                     'detil' => $this->modalName,
                     'sub_komponen_id' => $this->parentId
                 ]);
@@ -100,7 +102,7 @@ class DataHierarki extends Page
 
             case 'subDetil':
                 $newData = SubDetil::create([
-                    'kode_sub_detil' => $this->modalKode ?: null, // Sub Detil boleh tanpa kode
+                    'kode' => $this->modalKode ?: null, // Sub Detil boleh tanpa kode
                     'sub_detil' => $this->modalName,
                     'detil_id' => $this->parentId
                 ]);
