@@ -25,6 +25,8 @@ class SasaranKegiatanResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    protected static ?string $navigationGroup = 'Tabel Cascading';
+
     public static function getModelLabel(): string
     {
         return 'Sasaran Kegiatan';

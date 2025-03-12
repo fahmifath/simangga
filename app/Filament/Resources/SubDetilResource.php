@@ -25,6 +25,8 @@ class SubDetilResource extends Resource
 
     protected static ?int $navigationSort = 7;
 
+    protected static ?string $navigationGroup = 'Tabel Cascading';
+
     public static function getModelLabel(): string
     {
         return 'Sub Detil';

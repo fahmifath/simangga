@@ -25,6 +25,8 @@ class KomponenResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    protected static ?string $navigationGroup = 'Tabel Cascading';
+
     public static function getModelLabel(): string
     {
         return 'Komponen';

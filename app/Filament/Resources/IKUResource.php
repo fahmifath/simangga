@@ -24,6 +24,8 @@ class IKUResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    protected static ?string $navigationGroup = 'Tabel Cascading';
+
     public static function getModelLabel(): string
     {
         return 'IKU';

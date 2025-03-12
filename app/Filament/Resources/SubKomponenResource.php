@@ -24,6 +24,8 @@ class SubKomponenResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $sort = 6;
+    protected static ?string $navigationGroup = 'Tabel Cascading';
+
     protected static ?int $navigationSort = 5;
 
     public static function getModelLabel(): string
