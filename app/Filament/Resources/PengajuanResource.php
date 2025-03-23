@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Pengajuan;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -43,78 +44,92 @@ class PengajuanResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('user_id')
+                    ->default(Filament::auth()->user()->id)
+                    ->disabled()
+                    ->dehydrated(),
+
                 Select::make('sasaran_kegiatan_id')
                     ->label('Sasaran Kegiatan')
-                    ->relationship('sasaranKegiatan', 'sasaran_kegiatan',
-                    fn ($query) => $query->orderBy('id', 'asc'))
+                    ->relationship(
+                        'sasaranKegiatan',
+                        'sasaran_kegiatan',
+                        fn($query) => $query->orderBy('id', 'asc')
+                    )
                     ->required()
                     ->placeholder('Pilih Sasaran Kegiatan')
                     ->reactive(), // Menjadikan dropdown ini sebagai trigger untuk select lainnya
 
                 Select::make('iku_id')
                     ->label('IKU')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\Iku::where('sasaran_kegiatan_id', $get('sasaran_kegiatan_id'))
-                        ->pluck('iku', 'id')
+                            ->pluck('iku', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih IKU')
-                    ->disabled(fn (callable $get) => empty($get('sasaran_kegiatan_id'))) // Disabled jika Sasaran Kegiatan belum dipilih
+                    ->disabled(fn(callable $get) => empty($get('sasaran_kegiatan_id'))) // Disabled jika Sasaran Kegiatan belum dipilih
                     ->reactive(),
 
                 Select::make('ro_id')
                     ->label('RO')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\Ro::where('iku_id', $get('iku_id'))
-                        ->pluck('ro', 'id')
+                            ->pluck('ro', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih RO')
-                    ->disabled(fn (callable $get) => empty($get('iku_id')))
+                    ->disabled(fn(callable $get) => empty($get('iku_id')))
                     ->reactive(),
 
                 Select::make('komponen_id')
                     ->label('Komponen')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\Komponen::where('ro_id', $get('ro_id'))
-                        ->pluck('komponen', 'id')
+                            ->pluck('komponen', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih Komponen')
-                    ->disabled(fn (callable $get) => empty($get('ro_id')))
+                    ->disabled(fn(callable $get) => empty($get('ro_id')))
                     ->reactive(),
 
                 Select::make('sub_komponen_id')
                     ->label('Sub Komponen')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\SubKomponen::where('komponen_id', $get('komponen_id'))
-                        ->pluck('sub_komponen', 'id')
+                            ->pluck('sub_komponen', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih Sub Komponen')
-                    ->disabled(fn (callable $get) => empty($get('komponen_id')))
+                    ->disabled(fn(callable $get) => empty($get('komponen_id')))
                     ->reactive(),
 
                 Select::make('detil_id')
                     ->label('Detil')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\Detil::where('sub_komponen_id', $get('sub_komponen_id'))
-                        ->pluck('detil', 'id')
+                            ->pluck('detil', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih Detil')
-                    ->disabled(fn (callable $get) => empty($get('sub_komponen_id')))
+                    ->disabled(fn(callable $get) => empty($get('sub_komponen_id')))
                     ->reactive(),
 
                 Select::make('sub_detil_id')
                     ->label('Sub Detil')
-                    ->options(fn (callable $get) => 
+                    ->options(
+                        fn(callable $get) =>
                         \App\Models\SubDetil::where('detil_id', $get('detil_id'))
-                        ->pluck('sub_detil', 'id')
+                            ->pluck('sub_detil', 'id')
                     )
                     ->required()
                     ->placeholder('Pilih Sub Detil')
-                    ->disabled(fn (callable $get) => empty($get('detil_id')))
+                    ->disabled(fn(callable $get) => empty($get('detil_id')))
                     ->reactive(),
 
                 TextInput::make('pengaju')
@@ -127,18 +142,24 @@ class PengajuanResource extends Resource
                     ->required()
                     ->placeholder('Masukkan jumlah qty'),
 
-                TextInput::make('harga_satuan')   
+                TextInput::make('harga_satuan')
                     ->label('Harga Satuan')
                     ->required()
                     ->placeholder('Masukkan harga satuan'),
-                
+
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $user = Filament::auth()->user();
         return $table
-            ->columns([                
+            ->query(
+                Pengajuan::query()->when(!$user->hasRole('super_admin'), function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+            )
+            ->columns([
                 TextColumn::make('subDetil.sub_detil')
                     ->label('Detail Pengajuan')
                     ->searchable()
@@ -155,12 +176,12 @@ class PengajuanResource extends Resource
                     ->label('Harga Satuan')
                     ->searchable()
                     ->sortable()
-                    ->formatStateUsing(fn ($state) => 'Rp '. number_format($state, 0, ',', '.')), 
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.')),
                 TextColumn::make('jumlah')
                     ->label('Jumlah')
                     ->searchable()
                     ->sortable()
-                    ->formatStateUsing(fn ($state) => 'Rp '. number_format($state, 0, ',', '.')), 
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.')),
             ])
             ->filters([
                 //
@@ -168,19 +189,19 @@ class PengajuanResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Action::make('accept')
-                ->label('Terima')
-                ->icon('heroicon-o-check-circle')
-                ->color('success')
-                ->requiresConfirmation()
-                ->action(fn (Pengajuan $record) => $record->update(['status' => 'accepted'])),
+                    ->label('Terima')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(fn(Pengajuan $record) => $record->update(['status' => 'accepted'])),
 
-            Action::make('decline')
-                ->label('Tolak')
-                ->color('danger')
-                ->icon('heroicon-o-x-circle')
-                ->requiresConfirmation()
-                ->action(fn (Pengajuan $record) => $record->update(['status' => 'declined'])),
-                
+                Action::make('decline')
+                    ->label('Tolak')
+                    ->color('danger')
+                    ->icon('heroicon-o-x-circle')
+                    ->requiresConfirmation()
+                    ->action(fn(Pengajuan $record) => $record->update(['status' => 'declined'])),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
