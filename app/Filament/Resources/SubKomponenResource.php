@@ -49,7 +49,9 @@ class SubKomponenResource extends Resource
             ->schema([
                 Select::make('komponen_id')
                     ->label('Komponen')
-                    ->relationship('komponen', 'komponen')
+                    ->relationship(
+                        'komponen', 'komponen',
+                        fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih komponen'),
                 TextInput::make('sub_komponen')

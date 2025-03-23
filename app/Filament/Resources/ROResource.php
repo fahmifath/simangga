@@ -50,7 +50,8 @@ class ROResource extends Resource
             ->schema([
                 Select::make('iku_id')
                     ->label('IKU')
-                    ->relationship('iku', 'iku')
+                    ->relationship('iku', 'iku',
+                    fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih IKU'),
 

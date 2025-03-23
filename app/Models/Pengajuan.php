@@ -9,6 +9,7 @@ class Pengajuan extends Model
     protected $table = 'pengajuan';
 
     protected $fillable = [
+        'user_id',
         'sasaran_kegiatan_id',
         'iku_id',
         'ro_id',
@@ -19,7 +20,13 @@ class Pengajuan extends Model
         'pengaju',
         'qty',
         'harga_satuan',
+        'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function sasaranKegiatan()
     {

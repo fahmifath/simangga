@@ -49,7 +49,9 @@ class DetilResource extends Resource
             ->schema([
                 Select::make('sub_komponen_id')
                     ->label('Sub Komponen')
-                    ->relationship('subKomponen', 'sub_komponen')
+                    ->relationship(
+                        'subKomponen', 'sub_komponen',
+                        fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih sub komponen'),
                 TextInput::make('detil')

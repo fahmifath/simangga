@@ -48,7 +48,9 @@ class SubDetilResource extends Resource
             ->schema([
                 Select::make('detil_id')
                     ->label('Detil')
-                    ->relationship('detil', 'detil')
+                    ->relationship(
+                        'detil', 'detil',
+                        fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih detil'),
                 TextInput::make('sub_detil')

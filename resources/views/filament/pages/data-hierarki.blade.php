@@ -7,7 +7,7 @@
                 <tr>
                     <th class="border border-gray-300 p-2 w-10"></th> <!-- Tombol Toggle -->
                     <th class="border border-gray-300 p-2 w-40">Kode</th>
-                    <th class="border border-gray-300 p-2">Nama</th>
+                    <th class="border border-gray-300 p-2">Uraian Suboutput/Komponen/Subkomponen/Detil</th>
                     <th class="border border-gray-300 p-2 w-20">Aksi</th>
                 </tr>
             </thead>
@@ -41,7 +41,9 @@
                                     </button>
                                 </td>
                                 <td class="border border-gray-300 p-2 text-center">{{ $komponen->kode }}</td>
-                                <td class="border border-gray-300 p-2">{{ $komponen->komponen }}</td>
+                                <td class="border border-gray-300 p-2">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{ $komponen->komponen }}
+                                </td>
                                 <td class="border border-gray-300 p-2 text-center">
                                     <button wire:click="openModal({{ $ro->id }}, 'komponen')"
                                         class="bg-green-500 text-black px-2 py-1 rounded">Tambah</button>
@@ -58,8 +60,10 @@
                                                 </span>
                                             </button>
                                         </td>
-                                        <td class="border border-gray-300 p-2t text-center">{{ $subKomponen->kode }}</td>
-                                        <td class="border border-gray-300 p-2">{{ $subKomponen->sub_komponen }}</td>
+                                        <td class="border border-gray-300 p-2 text-center">{{ $subKomponen->kode }}</td>
+                                        <td class="border border-gray-300 p-2">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $subKomponen->sub_komponen }}
+                                        </td>
                                         <td class="border border-gray-300 p-2 text-center">
                                             <button wire:click="openModal({{ $komponen->id }}, 'subKomponen')"
                                                 class="bg-yellow-500 text-black px-2 py-1 rounded">Tambah</button>
@@ -77,7 +81,9 @@
                                                     </button>
                                                 </td>
                                                 <td class="border border-gray-300 p-2 text-center">{{ $detil->kode }}</td>
-                                                <td class="border border-gray-300 p-2">{{ $detil->detil }}</td>
+                                                <td class="border border-gray-300 p-2">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $detil->detil }}
+                                                </td>
                                                 <td class="border border-gray-300 p-2 text-center">
                                                     <button wire:click="openModal({{ $subKomponen->id }}, 'detil')"
                                                         class="bg-red-500 text-black px-2 py-1 rounded">Tambah</button>
@@ -90,7 +96,8 @@
                                                         <td class="border border-gray-300 p-2"></td>
                                                         <td class="border border-gray-300 p-2"></td>
                                                         <td class="border border-gray-300 p-2">
-                                                            {{ $subDetil->sub_detil }}</td>
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $subDetil->sub_detil }}
+                                                        </td>
                                                         <td class="border border-gray-300 p-2 text-center">
                                                             <button
                                                                 wire:click="openModal({{ $detil->id }}, 'subDetil')"

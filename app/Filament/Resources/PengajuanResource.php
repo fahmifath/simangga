@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use App\Models\Pengajuan;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PengajuanResource extends Resource
 {
     protected static ?string $model = Pengajuan::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
     protected static ?int $navigationSort = -1;
 
     protected static ?string $navigationGroup = 'Pengajuan';
@@ -44,7 +45,8 @@ class PengajuanResource extends Resource
             ->schema([
                 Select::make('sasaran_kegiatan_id')
                     ->label('Sasaran Kegiatan')
-                    ->relationship('sasaranKegiatan', 'sasaran_kegiatan')
+                    ->relationship('sasaranKegiatan', 'sasaran_kegiatan',
+                    fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih Sasaran Kegiatan')
                     ->reactive(), // Menjadikan dropdown ini sebagai trigger untuk select lainnya
@@ -129,6 +131,7 @@ class PengajuanResource extends Resource
                     ->label('Harga Satuan')
                     ->required()
                     ->placeholder('Masukkan harga satuan'),
+                
             ]);
     }
 
@@ -137,7 +140,7 @@ class PengajuanResource extends Resource
         return $table
             ->columns([                
                 TextColumn::make('subDetil.sub_detil')
-                    ->label('Sub Detil')
+                    ->label('Detail Pengajuan')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('pengaju')
@@ -164,6 +167,20 @@ class PengajuanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('accept')
+                ->label('Terima')
+                ->icon('heroicon-o-check-circle')
+                ->color('success')
+                ->requiresConfirmation()
+                ->action(fn (Pengajuan $record) => $record->update(['status' => 'accepted'])),
+
+            Action::make('decline')
+                ->label('Tolak')
+                ->color('danger')
+                ->icon('heroicon-o-x-circle')
+                ->requiresConfirmation()
+                ->action(fn (Pengajuan $record) => $record->update(['status' => 'declined'])),
+                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

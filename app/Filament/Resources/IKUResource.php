@@ -48,7 +48,9 @@ class IKUResource extends Resource
             ->schema([
                 Select::make('sasaran_kegiatan_id')
                     ->label('Sasaran Kegiatan')
-                    ->relationship('sasaranKegiatan', 'sasaran_kegiatan')
+                    ->relationship(
+                        'sasaranKegiatan', 'sasaran_kegiatan',
+                        fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih sasaran kegiatan'),
 

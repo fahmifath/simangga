@@ -48,7 +48,8 @@ class KomponenResource extends Resource
             ->schema([
                 Select::make('ro_id')
                     ->label('RO')
-                    ->relationship('ro', 'ro')
+                    ->relationship('ro', 'ro',
+                    fn ($query) => $query->orderBy('id', 'asc'))
                     ->required()
                     ->placeholder('Pilih RO'),
 
